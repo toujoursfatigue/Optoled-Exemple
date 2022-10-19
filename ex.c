@@ -1,47 +1,46 @@
-/* STEP MOTOR KONTROLÜ */
-#define butonA portb.rb0
-#define butonB portb.rb1
-#define butonC portb.rb2
+#define butA portb.rb0
+#define butB portb.rb1
+#define butC portb.rb2
 int i;
-int sure;
-bekle(int ssure)
+int time;
+bekle(int ttime)
 {
-Vdelay_ms(ssure); //ADIM SÜRESİ AYARLAMA
-if(butonA==1) sure=sure+10; //BUTON A'YA SÜRE ARTTIR
-if(butonB==1) sure=sure-10;//BUTON B'YE SÜRE AZALT
-if(butonC==1) sure=100; //BUTON C'YE SÜREYİ 100ms yap
-if(sure<50) sure=50; // SÜRE 50 DEN KÜÇÜKSE 50 YAP
-if(sure>1000) sure=1000; // SÜRE 1000’DEN BÜYÜKSE 100 YAP
+Vdelay_ms(ttime);
+if(butA==1) time=time+10; 
+if(butB==1) time=time-10;
+if(butC==1) time=100;
+if(time<50) time=50; 
+if(time>1000) time=1000; 
 }
-ileri(short adim)
+ileri(short step)
+{
+for(i=0;i<step;i++)
+{
+PORTC=1;wait(time);
+PORTC=2;wait(time);
+PORTC=4;wait(time);
+PORTC=8;wait(time);
+}
+}
+geri(short step)
 {
 for(i=0;i<adim;i++)
 {
-PORTC=1;bekle(sure);
-PORTC=2;bekle(sure);
-PORTC=4;bekle(sure);
-PORTC=8;bekle(sure);
-}
-}
-geri(short adim)
-{
-for(i=0;i<adim;i++)
-{
-PORTC=8;bekle(sure);
-PORTC=4;bekle(sure);
-PORTC=2;bekle(sure);
-PORTC=1;bekle(sure);
+PORTC=8;wait(time);
+PORTC=4;wait(time);
+PORTC=2;wait(time);
+PORTC=1;wait(time);
 }
 }
 void main()
 {
-ANSELB=0; // B PORTU DİJİTAL AYARLANDI.
-ANSELC=0; // C PORTU DİJİTAL AYARLANDI.
-TRISB=7; // B PORTU B0,B1,B2 PİNLERİ GİRİŞ AYARLANDI.
-TRISC=0; // C PORTU ÇIKIŞ OLARAK AYARLANDI.
-sure=100; // BEKLEME SÜRESİ 100ms OLARAK AYARLANDI.
+ANB=0; 
+ANC=0;
+TRB=7;
+TRC=0;
+time=100;
 129
 BASLA:
-ileri(10); // 10*4=40 ADIM İLERİ GİT.
-geri(10); // 10*4=40 ADIM GERİ GİT.
-goto BASLA; // BASLA DEĞİŞKENİNE GERİ DÖN.
+ileri(10); 
+geri(10);
+goto BASLA; 
