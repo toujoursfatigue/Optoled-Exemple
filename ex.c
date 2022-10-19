@@ -24,7 +24,7 @@ PORTC=8;wait(time);
 }
 geri(short step)
 {
-for(i=0;i<adim;i++)
+for(i=0;i<step;i++)
 {
 PORTC=8;wait(time);
 PORTC=4;wait(time);
